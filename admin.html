@@ -1,0 +1,2485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Panel - SCOUTBOND 2026</title>
+    <link rel="icon" href="https://i.ibb.co/6J4kRXWG/1000025032.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/6J4kRXWG/1000025032.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A1F44 0%, #1E3A8A 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            padding: 20px 16px;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .auth-slider-container {
+            background-color: #fff;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            min-height: 560px;
+            border: 1px solid rgba(10, 31, 68, 0.06);
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-container {
+            position: absolute;
+            top: 0;
+            height: 100%;
+            transition: all 0.6s ease-in-out;
+        }
+
+        .sign-in-container {
+            left: 0;
+            width: 50%;
+            z-index: 2;
+        }
+        .auth-slider-container.right-panel-active .sign-in-container {
+            transform: translateX(100%);
+        }
+
+        .sign-up-container {
+            left: 0;
+            width: 50%;
+            opacity: 0;
+            z-index: 1;
+            overflow-y: auto;
+            padding: 8px 0;
+        }
+        .auth-slider-container.right-panel-active .sign-up-container {
+            transform: translateX(100%);
+            opacity: 1;
+            z-index: 5;
+            animation: show 0.6s;
+        }
+
+        @keyframes show {
+            0%, 49.99% { opacity: 0; z-index: 1; }
+            50%, 100% { opacity: 1; z-index: 5; }
+        }
+
+        .auth-slider-container form {
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 30px 32px;
+            height: 100%;
+            text-align: center;
+        }
+
+        .auth-slider-container form .form-scroll {
+            width: 100%;
+            max-height: 380px;
+            overflow-y: auto;
+            padding: 4px 6px 8px 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .auth-slider-container form .form-scroll::-webkit-scrollbar { width: 4px; }
+        .auth-slider-container form .form-scroll::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 10px; }
+        .auth-slider-container form .form-scroll::-webkit-scrollbar-thumb { background: #0A1F44; border-radius: 10px; }
+
+        .auth-slider-container form .logo-area {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 6px;
+        }
+        .auth-slider-container form .logo-area img {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            margin-bottom: 4px;
+        }
+        .auth-slider-container form .logo-area h1 {
+            font-weight: 700;
+            font-size: 20px;
+            color: #1a1a1a;
+        }
+        .auth-slider-container form .logo-area p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .auth-slider-container form .social-container {
+            margin: 6px 0 4px;
+            display: flex;
+            gap: 8px;
+        }
+        .auth-slider-container form .social-container a {
+            border: 1px solid #e0e0e0;
+            border-radius: 50%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            height: 36px;
+            width: 36px;
+            color: #555;
+            transition: all 0.2s ease;
+            background: #fafafa;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .auth-slider-container form .social-container a:hover {
+            background: #0A1F44;
+            color: white;
+            border-color: #0A1F44;
+            transform: translateY(-2px);
+        }
+
+        .divider-text {
+            font-size: 11px;
+            color: #999;
+            margin: 2px 0 6px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 100%;
+        }
+        .divider-text::before, .divider-text::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .auth-slider-container input,
+        .auth-slider-container select {
+            background-color: #f5f5f5;
+            border: 2px solid transparent;
+            padding: 10px 14px;
+            margin: 3px 0;
+            width: 100%;
+            border-radius: 30px;
+            font-size: 13px;
+            transition: all 0.25s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+        .auth-slider-container input:focus,
+        .auth-slider-container select:focus {
+            outline: none;
+            border-color: #0A1F44;
+            background-color: #fff;
+        }
+
+        .auth-slider-container input::placeholder { color: #aaa; font-weight: 300; }
+
+        .forgot-link {
+            font-size: 12px;
+            color: #757575;
+            margin: 6px 0 10px;
+            display: inline-block;
+            text-decoration: none;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        .forgot-link:hover { color: #0A1F44; }
+
+        .auth-slider-container button {
+            border-radius: 40px;
+            border: none;
+            background-color: #0A1F44;
+            color: #FFFFFF;
+            font-size: 13px;
+            font-weight: 700;
+            padding: 12px 36px;
+            letter-spacing: 0.8px;
+            text-transform: uppercase;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            margin-top: 6px;
+            font-family: 'Poppins', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .auth-slider-container button:hover {
+            background-color: #1E3A8A;
+            transform: scale(1.02);
+        }
+        .auth-slider-container button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .auth-slider-container button.ghost {
+            background-color: transparent;
+            border: 2px solid #ffffff;
+            padding: 10px 28px;
+        }
+        .auth-slider-container button.ghost:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .overlay-container {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            width: 50%;
+            height: 100%;
+            overflow: hidden;
+            transition: transform 0.6s ease-in-out;
+            z-index: 100;
+        }
+        .auth-slider-container.right-panel-active .overlay-container {
+            transform: translateX(-100%);
+        }
+        .overlay {
+            background: linear-gradient(135deg, #0A1F44 0%, #1E3A8A 100%);
+            color: #FFFFFF;
+            position: relative;
+            left: -100%;
+            height: 100%;
+            width: 200%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+        .auth-slider-container.right-panel-active .overlay {
+            transform: translateX(50%);
+        }
+        .overlay-panel {
+            position: absolute;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            padding: 0 28px;
+            text-align: center;
+            top: 0;
+            height: 100%;
+            width: 50%;
+            transform: translateX(0);
+            transition: transform 0.6s ease-in-out;
+        }
+        .overlay-left { transform: translateX(-20%); }
+        .auth-slider-container.right-panel-active .overlay-left { transform: translateX(0); }
+        .overlay-right { right: 0; transform: translateX(0); }
+        .auth-slider-container.right-panel-active .overlay-right { transform: translateX(20%); }
+
+        .overlay-panel .overlay-icon {
+            font-size: 36px;
+            margin-bottom: 6px;
+            color: #ff6b6b;
+        }
+        .overlay-panel h1 { font-size: 24px; font-weight: 700; }
+        .overlay-panel p {
+            font-size: 13px;
+            opacity: 0.9;
+            margin: 8px 0 12px;
+            max-width: 280px;
+        }
+
+        .toast-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+        .toast {
+            background: #fff;
+            padding: 14px 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            animation: slideIn 0.3s ease;
+            max-width: 380px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .toast.success { border-left: 4px solid #2e7d32; }
+        .toast.error { border-left: 4px solid #d32f2f; }
+        .toast.warning { border-left: 4px solid #f57c00; }
+        .toast.info { border-left: 4px solid #0A1F44; }
+        @keyframes slideIn {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        .admin-container {
+            width: 100%;
+            max-width: 1200px;
+            display: none;
+        }
+        .admin-header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            gap: 15px;
+        }
+        .admin-header h1 {
+            color: #333;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .admin-header h1 i { color: #0A1F44; }
+        .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .admin-email {
+            color: #666;
+            font-size: 14px;
+            background: #f0f0f0;
+            padding: 8px 15px;
+            border-radius: 20px;
+        }
+        .admin-position-badge {
+            background: #0A1F44;
+            color: white;
+            padding: 4px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        .logout-btn {
+            padding: 10px 20px;
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        .logout-btn:hover { background: #da190b; transform: translateY(-2px); }
+        .template-count-badge {
+            background: #0A1F44;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        .view-log-btn {
+            padding: 10px 20px;
+            background: #17a2b8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            text-decoration: none;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+        }
+        .view-log-btn:hover { background: #138496; transform: translateY(-2px); }
+        .manage-admins-btn {
+            padding: 10px 20px;
+            background: #0A1F44;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            display: none;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+            font-weight: 600;
+            font-family: 'Poppins', sans-serif;
+        }
+        .manage-admins-btn:hover { background: #1E3A8A; transform: translateY(-2px); }
+        .manage-admins-btn i { font-size: 16px; }
+
+        .upload-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .upload-panel h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .upload-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .upload-card {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px dashed #0A1F44;
+        }
+        .upload-card h3 {
+            color: #0A1F44;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .file-input-wrapper { position: relative; margin: 15px 0; }
+        .file-input-wrapper input[type="file"] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        .file-input-label {
+            display: block;
+            padding: 15px;
+            background: white;
+            border: 2px solid #0A1F44;
+            border-radius: 8px;
+            text-align: center;
+            color: #0A1F44;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .file-input-label:hover { background: #0A1F44; color: white; }
+        .preview-container {
+            width: 200px;
+            height: 200px;
+            margin: 15px auto;
+            border-radius: 10px;
+            overflow: hidden;
+            border: 3px solid #fff;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .preview-container img { width: 100%; height: 100%; object-fit: cover; }
+        .btn-upload {
+            width: 100%;
+            padding: 12px;
+            background: #0A1F44;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-upload:hover:not(:disabled) { background: #1E3A8A; transform: translateY(-2px); }
+        .btn-upload:disabled { background: #cccccc; cursor: not-allowed; }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 15px 0;
+            padding: 10px;
+            background: #fff;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #0A1F44;
+        }
+        .checkbox-group label { font-weight: 600; color: #333; cursor: pointer; }
+        .checkbox-group .hint { color: #666; font-size: 12px; font-weight: normal; }
+
+        .caption-settings {
+            background: white;
+            padding: 25px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        .caption-settings h2 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .caption-settings .form-group { margin-bottom: 15px; }
+        .caption-settings label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+        }
+        .caption-settings textarea {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 15px;
+            font-family: 'Poppins', sans-serif;
+            resize: vertical;
+            min-height: 80px;
+            transition: all 0.3s;
+        }
+        .caption-settings textarea:focus {
+            border-color: #0A1F44;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(10, 31, 68, 0.1);
+        }
+        .caption-settings .hint-text { color: #666; font-size: 13px; margin-top: 4px; }
+        .caption-settings .btn-save-caption {
+            padding: 12px 30px;
+            background: #0A1F44;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .caption-settings .btn-save-caption:hover { background: #1E3A8A; transform: translateY(-2px); }
+        .caption-settings .btn-save-caption:disabled { background: #cccccc; cursor: not-allowed; transform: none; }
+
+        .imgbb-info {
+            background: #e8f5e9;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-size: 13px;
+            color: #2e7d32;
+            border-left: 4px solid #0A1F44;
+        }
+        .imgbb-info i { color: #0A1F44; margin-right: 8px; }
+
+        .images-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            margin-bottom: 30px;
+        }
+        .images-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .templates-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+        .template-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+        .template-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            border-color: #0A1F44;
+        }
+        .template-header {
+            background: #0A1F44;
+            color: white;
+            padding: 12px 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .template-header h4 { font-size: 16px; }
+        .template-body {
+            padding: 15px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .template-body .preview-item { text-align: center; }
+        .template-body .preview-item label {
+            display: block;
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+            margin-bottom: 5px;
+        }
+        .template-body .preview-item img {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 2px solid #e0e0e0;
+        }
+        .template-actions {
+            padding: 12px 15px;
+            display: flex;
+            gap: 8px;
+            border-top: 1px solid #e0e0e0;
+        }
+        .template-actions .btn-sm {
+            flex: 1;
+            padding: 6px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-sm-edit { background: #ffc107; color: #212529; }
+        .btn-sm-edit:hover { background: #e0a800; }
+        .btn-sm-delete { background: #f44336; color: white; }
+        .btn-sm-delete:hover { background: #da190b; }
+
+        .approvals-section {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+            display: none;
+        }
+        .approvals-section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 22px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .approval-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .approval-item:last-child { border-bottom: none; }
+        .approval-item .approval-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+        .approval-item .approval-info .name { font-weight: 600; color: #333; }
+        .approval-item .approval-info .email { color: #666; font-size: 14px; }
+        .approval-item .approval-info .position {
+            background: #e8f0fe;
+            padding: 2px 12px;
+            border-radius: 12px;
+            font-size: 12px;
+            color: #1a73e8;
+        }
+        .approval-item .approval-actions { display: flex; gap: 8px; }
+        .approval-item .approval-actions button {
+            padding: 6px 16px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-approve { background: #28a745; color: white; }
+        .btn-approve:hover { background: #218838; }
+        .btn-reject { background: #f44336; color: white; }
+        .btn-reject:hover { background: #da190b; }
+        .approval-empty { text-align: center; padding: 30px; color: #999; }
+
+        .manage-modal {
+            display: none;
+            position: fixed;
+            z-index: 10000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .manage-modal-content {
+            background: white;
+            max-width: 800px;
+            width: 95%;
+            margin: 40px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+            max-height: 85vh;
+            overflow-y: auto;
+            animation: slideDown 0.3s ease;
+        }
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .manage-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #0A1F44;
+            padding-bottom: 15px;
+            margin-bottom: 20px;
+        }
+        .manage-modal-header h2 {
+            color: #333;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .manage-modal-header h2 i { color: #0A1F44; }
+        .manage-modal-header .close-btn {
+            background: #f44336;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .manage-modal-header .close-btn:hover { background: #da190b; transform: rotate(90deg); }
+
+        .manage-admin-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #f0f0f0;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .manage-admin-item:last-child { border-bottom: none; }
+        .manage-admin-item .admin-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .manage-admin-item .admin-info .name { font-weight: 600; color: #333; }
+        .manage-admin-item .admin-info .email { color: #666; font-size: 13px; }
+        .manage-admin-item .admin-info .position-badge {
+            background: #e8f0fe;
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            color: #1a73e8;
+        }
+        .manage-admin-item .admin-info .role-badge {
+            padding: 2px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        .role-badge.super { background: #0A1F44; color: white; }
+        .role-badge.regular { background: #e0e0e0; color: #333; }
+        .role-badge.pending { background: #ffc107; color: #333; }
+
+        .manage-admin-item .admin-actions {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+        .manage-admin-item .admin-actions button {
+            padding: 5px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 11px;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .btn-make-super { background: #0A1F44; color: white; }
+        .btn-make-super:hover { background: #1E3A8A; }
+        .btn-remove-super { background: #ffc107; color: #333; }
+        .btn-remove-super:hover { background: #e0a800; }
+        .btn-delete-admin { background: #f44336; color: white; }
+        .btn-delete-admin:hover { background: #da190b; }
+        .btn-reset-password { background: #17a2b8; color: white; }
+        .btn-reset-password:hover { background: #138496; }
+
+        .manage-admin-empty { text-align: center; padding: 40px; color: #999; }
+        .manage-admin-loading { text-align: center; padding: 40px; color: #666; }
+        .manage-admin-loading .spinner-small {
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #0A1F44;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        .edit-modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+        }
+        .edit-modal-content {
+            background: white;
+            max-width: 500px;
+            margin: 60px auto;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideDown 0.3s ease;
+        }
+        .edit-modal-content h3 {
+            color: #333;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .edit-modal-content .form-group { margin-bottom: 15px; }
+        .edit-modal-content .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 5px;
+            color: #333;
+        }
+        .edit-modal-content .form-group input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px dashed #0A1F44;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .edit-modal-content .form-group .preview-sm {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-top: 5px;
+            border: 2px solid #e0e0e0;
+        }
+        .edit-modal-actions { display: flex; gap: 10px; margin-top: 20px; }
+        .edit-modal-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+        .edit-modal-actions .btn-save { background: #0A1F44; color: white; }
+        .edit-modal-actions .btn-save:hover { background: #1E3A8A; }
+        .edit-modal-actions .btn-cancel { background: #e0e0e0; color: #333; }
+        .edit-modal-actions .btn-cancel:hover { background: #cccccc; }
+
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            display: none;
+            align-items: center;
+            gap: 8px;
+        }
+        .status.show { display: flex; }
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+
+        .loading { text-align: center; padding: 40px; display: none; }
+        .loading.show { display: block; }
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0A1F44;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .empty-state { text-align: center; padding: 40px; color: #999; }
+        .empty-state i { font-size: 48px; margin-bottom: 15px; }
+
+        @media (max-width: 768px) {
+            .auth-slider-container { min-height: 520px; border-radius: 12px; }
+            .form-container, .sign-in-container, .sign-up-container, .overlay-container { width: 50%; }
+            .overlay-container { left: 50%; }
+            .auth-slider-container.right-panel-active .sign-in-container,
+            .auth-slider-container.right-panel-active .sign-up-container { transform: translateX(100%); }
+            .auth-slider-container form .form-scroll { max-height: 300px; }
+            .auth-slider-container form { padding: 20px 16px; }
+            .auth-slider-container form .logo-area h1 { font-size: 17px; }
+            .overlay-panel h1 { font-size: 16px; }
+            .overlay-panel p { font-size: 10px; max-width: 120px; }
+            .auth-slider-container input, .auth-slider-container select { padding: 8px 12px; font-size: 12px; }
+
+            .admin-header { flex-direction: column; text-align: center; }
+            .admin-info { flex-direction: column; width: 100%; }
+            .admin-email { width: 100%; text-align: center; }
+            .logout-btn, .view-log-btn, .manage-admins-btn { width: 100%; justify-content: center; }
+            .upload-grid { grid-template-columns: 1fr; }
+            .preview-container { width: 150px; height: 150px; }
+            .templates-grid { grid-template-columns: 1fr; }
+            .template-body { grid-template-columns: 1fr 1fr; }
+            .edit-modal-content { margin: 20px; padding: 20px; }
+            .approval-item { flex-direction: column; align-items: flex-start; }
+            .approval-item .approval-actions { width: 100%; }
+            .approval-item .approval-actions button { flex: 1; }
+            .manage-modal-content { margin: 20px auto; padding: 20px; }
+            .manage-admin-item { flex-direction: column; align-items: flex-start; }
+            .manage-admin-item .admin-actions { width: 100%; }
+            .manage-admin-item .admin-actions button { flex: 1; }
+        }
+
+        @media (max-width: 480px) {
+            .auth-slider-container form { padding: 12px 10px; }
+            .auth-slider-container form .logo-area h1 { font-size: 15px; }
+            .auth-slider-container form .logo-area img { width: 55px; height: 55px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="toastContainer" class="toast-container"></div>
+
+    <div class="auth-wrapper">
+        <div class="auth-slider-container" id="authContainer">
+
+            <div class="form-container sign-up-container">
+                <form action="#" id="registerForm">
+                    <div class="logo-area">
+                        <img src="https://i.ibb.co/6J4kRXWG/1000025032.png" alt="Logo" />
+                        <h1>Admin Registration</h1>
+                        <p>Hossainshahi Open Scout Group</p>
+                    </div>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <span class="divider-text">or use email</span>
+
+                    <div class="form-scroll" id="registerScroll">
+                        <input type="text" id="regName" placeholder="Full Name *" required />
+                        <input type="email" id="regEmail" placeholder="Email Address *" required />
+                        <div style="position: relative; width: 100%; margin: 3px 0;">
+                            <input type="password" id="regPassword" placeholder="Password * (min 6 chars)" required minlength="6" style="padding-right: 45px; width: 100%;">
+                            <i class="fas fa-eye" onclick="togglePassword('regPassword', this)" 
+                               style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #777; font-size: 16px;"></i>
+                        </div>
+
+                        <div style="position: relative; width: 100%; margin: 3px 0;">
+                            <input type="password" id="regConfirmPassword" placeholder="Confirm Password *" required style="padding-right: 45px; width: 100%;">
+                            <i class="fas fa-eye" onclick="togglePassword('regConfirmPassword', this)" 
+                               style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #777; font-size: 16px;"></i>
+                        </div>
+
+                        <select id="regPosition" required>
+                            <option value="">Select Your Position *</option>
+                            <option value="Senior Rover Mate">Senior Rover Mate</option>
+                            <option value="Rover Mate">Rover Mate</option>
+                            <option value="Assistant Rover Mate">Assistant Rover Mate</option>
+                           
+                            <option value="Member">Member</option>
+                            <option value="Editor">Editor</option>
+                        </select>
+
+                        <div style="display:flex; align-items:center; gap:8px; width:100%; margin:4px 0; font-size:12px;">
+                            <input type="checkbox" id="regAgreeTerms" required style="width:auto; margin:0;">
+                            <label for="regAgreeTerms">
+                                I agree to the <a href="terms.html" target="_blank" style="color: #0A1F44;">Terms and Conditions</a>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button type="submit" id="registerBtn">
+                        <i class="fas fa-user-plus"></i> Register
+                    </button>
+                    <p style="margin:4px 0 0; font-size:11px; color:#999;">
+                        <i class="fas fa-shield-alt" style="color:#0A1F44;"></i> Registration requires Super Admin approval
+                    </p>
+                </form>
+            </div>
+
+            <div class="form-container sign-in-container">
+                <form action="#" id="loginForm">
+                    <div class="logo-area">
+                        <img src="https://i.ibb.co/6J4kRXWG/1000025032.png" alt="Logo" />
+                        <h1>Admin Login</h1>
+                        <p>Hossainshahi Open Scout Group</p>
+                    </div>
+                    <div class="social-container">
+                        <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social"><i class="fab fa-google"></i></a>
+                        <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                    <span class="divider-text">or use your account</span>
+
+                    <input type="email" id="loginEmail" placeholder="Email Address *" required />
+                    <div style="position: relative; width: 100%; margin: 3px 0;">
+                        <input type="password" id="loginPassword" placeholder="Password *" required style="padding-right: 45px; width: 100%;">
+                        <i class="fas fa-eye" onclick="togglePassword('loginPassword', this)" 
+                           style="position: absolute; right: 15px; top: 50%; transform: translateY(-50%); cursor: pointer; color: #777; font-size: 16px;"></i>
+                    </div>
+
+                    <a href="#" class="forgot-link" id="forgotPasswordLink">Forgot your password?</a>
+
+                    <button type="submit" id="loginBtn">
+                        <i class="fas fa-sign-in-alt"></i> Login
+                    </button>
+                    <div style="margin-top:6px; font-size:11px; color:#999;">
+                        <i class="fas fa-crown" style="color:#0A1F44;"></i> Authorized access only
+                    </div>
+                </form>
+            </div>
+
+            <div class="overlay-container">
+                <div class="overlay">
+                    <div class="overlay-panel overlay-left">
+                        <i class="fas fa-user-plus overlay-icon"></i>
+                        <h1>Welcome Admin!</h1>
+                        <p>Enter your personal details and register as an admin.<br>Your account will be reviewed by Super Admins.</p>
+                        <button class="ghost" id="logIn">Log In</button>
+                    </div>
+                    <div class="overlay-panel overlay-right">
+                        <i class="fas fa-sign-in-alt overlay-icon"></i>
+                        <h1>Welcome Back!</h1>
+                        <p>Login to manage SCOUTBOND 2026 templates,<br>approve admins, and more.</p>
+                        <button class="ghost" id="register">Register</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="admin-container" id="adminContainer">
+        <div class="admin-header">
+            <h1>
+                <i class="fas fa-crown"></i>
+                Admin Dashboard
+                <span class="template-count-badge" id="templateCount">0 Templates</span>
+            </h1>
+            <div class="admin-info">
+                <span class="admin-email" id="adminEmail"></span>
+                <span class="admin-position-badge" id="adminPositionBadge">Position: N/A</span>
+                <a href="activitylog.html" target="_blank" class="view-log-btn">
+                    <i class="fas fa-history"></i> View Activity Log
+                </a>
+                <button class="manage-admins-btn" id="manageAdminsBtn" onclick="openManageAdminsModal()">
+                    <i class="fas fa-users-cog"></i> Manage Admins
+                </button>
+                <button class="logout-btn" onclick="handleLogout()">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
+            </div>
+        </div>
+
+        <div class="approvals-section" id="approvalsSection">
+            <h2><i class="fas fa-user-check"></i> Pending Approvals</h2>
+            <div id="approvalsList">
+                <div class="approval-empty">Loading pending requests...</div>
+            </div>
+        </div>
+
+        <div class="caption-settings" id="captionSettings">
+            <h2><i class="fas fa-quote-right"></i> Default Caption for Gallery Uploads</h2>
+            <p style="color:#666; margin-bottom:15px; font-size:14px;">
+                This caption will be automatically added to all SCOUTBOND 2026 gallery uploads.
+            </p>
+            <div class="form-group">
+                <label for="defaultCaption"><i class="fas fa-pen"></i> Default Caption</label>
+                <textarea id="defaultCaption" placeholder="Write the default caption here... e.g. 'SCOUTBOND 2026 - একসাথে আগামীর সম্ভাবনা'"></textarea>
+                <div class="hint-text">
+                    <i class="fas fa-info-circle"></i> Users will see this caption when uploading their photos.
+                </div>
+            </div>
+            <button class="btn-save-caption" id="saveCaptionBtn" onclick="saveDefaultCaption()">
+                <i class="fas fa-save"></i> Save Caption
+            </button>
+            <div id="captionStatus" class="status"></div>
+        </div>
+
+        <div class="upload-panel">
+            <h2><i class="fas fa-cloud-upload-alt"></i> Create New Template</h2>
+            <div class="imgbb-info">
+                <i class="fas fa-info-circle"></i> Upload Templates for SCOUTBOND 2026
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="includeBackground">
+                <label for="includeBackground">
+                    <i class="fas fa-check-circle" style="color: #0A1F44;"></i>
+                    Do you want to add background?
+                    <span class="hint">(If unchecked, only frame will be uploaded)</span>
+                </label>
+            </div>
+
+            <div class="upload-grid">
+                <div class="upload-card">
+                    <h3><i class="fas fa-frame"></i> Frame Image</h3>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="frameUpload" accept="image/*" onchange="previewImage(this, 'frame')" />
+                        <label for="frameUpload" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose Frame
+                        </label>
+                    </div>
+                    <div class="preview-container">
+                        <img id="framePreview" src="https://via.placeholder.com/200x200?text=Preview" alt="Preview" />
+                    </div>
+                    <button class="btn-upload" onclick="uploadImageToImgBB('frame')" id="uploadFrameBtn" disabled>
+                        <i class="fas fa-upload"></i> Upload to ImgBB
+                    </button>
+                </div>
+                <div class="upload-card" id="backgroundCard">
+                    <h3><i class="fas fa-image"></i> Background Image</h3>
+                    <div class="file-input-wrapper">
+                        <input type="file" id="backgroundUpload" accept="image/*" onchange="previewImage(this, 'background')" />
+                        <label for="backgroundUpload" class="file-input-label">
+                            <i class="fas fa-cloud-upload-alt"></i> Choose Background
+                        </label>
+                    </div>
+                    <div class="preview-container">
+                        <img id="backgroundPreview" src="https://via.placeholder.com/200x200?text=Preview" alt="Preview" />
+                    </div>
+                    <button class="btn-upload" onclick="uploadImageToImgBB('background')" id="uploadBackgroundBtn" disabled>
+                        <i class="fas fa-upload"></i> Upload to ImgBB
+                    </button>
+                </div>
+            </div>
+            <div id="uploadStatus" class="status"></div>
+        </div>
+
+        <div class="images-section">
+            <h2><i class="fas fa-layer-group"></i> Template List <span style="font-size:14px; color:#666; font-weight:400;">(Max 4 Templates)</span></h2>
+            <div class="loading" id="loadingImages">
+                <div class="spinner"></div>
+                <p>Loading templates...</p>
+            </div>
+            <div id="templatesGrid" class="templates-grid"></div>
+            <div id="emptyState" class="empty-state" style="display: none;">
+                <i class="fas fa-images"></i>
+                <h3>No Templates Found</h3>
+                <p>Create your first template using the panel above.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="manage-modal" id="manageAdminsModal">
+        <div class="manage-modal-content">
+            <div class="manage-modal-header">
+                <h2><i class="fas fa-users-cog"></i> Manage Admins</h2>
+                <button class="close-btn" onclick="closeManageAdminsModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <div id="manageAdminList">
+                <div class="manage-admin-loading">
+                    <div class="spinner-small"></div>
+                    Loading admins...
+                </div>
+            </div>
+            <div id="manageAdminStatus" class="status"></div>
+        </div>
+    </div>
+
+    <div class="edit-modal" id="editModal">
+        <div class="edit-modal-content">
+            <h3><i class="fas fa-edit"></i> Edit Template</h3>
+            <div class="form-group">
+                <label>Template Number: <span id="editTemplateNumber" style="color:#0A1F44; font-weight:700;"></span></label>
+            </div>
+            <div class="form-group">
+                <label>
+                    <i class="fas fa-check-circle" style="color:#0A1F44;"></i>
+                    Include Background?
+                </label>
+                <input type="checkbox" id="editIncludeBackground">
+            </div>
+            <div class="form-group" id="editBackgroundGroup">
+                <label><i class="fas fa-image"></i> New Background Image (Optional)</label>
+                <input type="file" id="editBackgroundUpload" accept="image/*" onchange="previewEditImage(this, 'background')" />
+                <div style="margin-top:8px;">
+                    <img id="editBackgroundPreview" class="preview-sm" src="https://via.placeholder.com/100?text=No+Image" alt="Current Background" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label><i class="fas fa-frame"></i> New Frame Image (Optional)</label>
+                <input type="file" id="editFrameUpload" accept="image/*" onchange="previewEditImage(this, 'frame')" />
+                <div style="margin-top:8px;">
+                    <img id="editFramePreview" class="preview-sm" src="https://via.placeholder.com/100?text=No+Image" alt="Current Frame" />
+                </div>
+            </div>
+            <div class="edit-modal-actions">
+                <button class="btn-save" onclick="saveTemplateEdit()">
+                    <i class="fas fa-save"></i> Save Changes
+                </button>
+                <button class="btn-cancel" onclick="closeEditModal()">
+                    <i class="fas fa-times"></i> Cancel
+                </button>
+            </div>
+            <div id="editStatus" class="status"></div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtE8AyzWg16ZxtsQu5u_ylHfwblqysb28",
+            authDomain: "hossenshahi-anniversary.firebaseapp.com",
+            projectId: "hossenshahi-anniversary",
+            storageBucket: "hossenshahi-anniversary.firebasestorage.app",
+            messagingSenderId: "490105238435",
+            appId: "1:490105238435:web:575e4da4c6bcbdecf6e016"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        const IMGBB_API_KEY = "ae883d1d5b5ca0ac775a91cae63871ba";
+        const MAX_TEMPLATES = 4;
+
+        class Toast {
+            static show(message, type = 'info') {
+                const container = document.getElementById('toastContainer');
+                if (!container) return;
+                const toast = document.createElement('div');
+                toast.className = `toast ${type}`;
+
+                let icon = 'info-circle';
+                if (type === 'success') icon = 'check-circle';
+                if (type === 'error') icon = 'exclamation-circle';
+                if (type === 'warning') icon = 'exclamation-triangle';
+
+                toast.innerHTML = `<i class="fas fa-${icon}"></i> <span>${message}</span>`;
+                container.appendChild(toast);
+                setTimeout(() => toast.remove(), 4500);
+            }
+        }
+
+        const registerButton = document.getElementById('register');
+        const logInButton = document.getElementById('logIn');
+        const authContainer = document.getElementById('authContainer');
+
+        registerButton.addEventListener('click', () => { authContainer.classList.add("right-panel-active"); });
+        logInButton.addEventListener('click', () => { authContainer.classList.remove("right-panel-active"); });
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const mode = urlParams.get('mode');
+        if (mode === 'register') { authContainer.classList.add("right-panel-active"); }
+        else { authContainer.classList.remove("right-panel-active"); }
+
+        let currentUser = null;
+        let currentAdminData = null;
+        let backgroundFile = null;
+        let frameFile = null;
+        let allTemplates = [];
+        let editingTemplateId = null;
+        let editBackgroundFile = null;
+        let editFrameFile = null;
+        let defaultCaption = '';
+
+        auth.onAuthStateChanged(async (user) => {
+            if (user) {
+                currentUser = user;
+                try {
+                    const doc = await db.collection('adminUsers').doc(user.uid).get();
+                    if (doc.exists) {
+                        currentAdminData = doc.data();
+                        if (currentAdminData.approved === true) {
+                            showAdminPanel(user);
+                            loadTemplates();
+                            loadDefaultCaption();
+                            if (currentAdminData.isSuperAdmin) {
+                                document.getElementById('approvalsSection').style.display = 'block';
+                                document.getElementById('manageAdminsBtn').style.display = 'flex';
+                                loadPendingApprovals();
+                            } else {
+                                document.getElementById('approvalsSection').style.display = 'none';
+                                document.getElementById('manageAdminsBtn').style.display = 'none';
+                            }
+                            return;
+                        } else {
+                            showLoginPanel();
+                            Toast.show('Your account is pending approval. Please wait for an admin to approve you.', 'warning');
+                            return;
+                        }
+                    } else {
+                        await auth.signOut();
+                        showLoginPanel();
+                        Toast.show('Account not found in admin system. Please register.', 'error');
+                        return;
+                    }
+                } catch (e) {
+                    console.error('Error checking admin status:', e);
+                    showLoginPanel();
+                    Toast.show('Error verifying admin status. Please try again.', 'error');
+                    return;
+                }
+            } else {
+                showLoginPanel();
+            }
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('regName').value.trim();
+            const email = document.getElementById('regEmail').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const confirmPassword = document.getElementById('regConfirmPassword').value;
+            const position = document.getElementById('regPosition').value;
+
+            if (!name || !email || !password || !position) {
+                Toast.show('Please fill in all fields', 'error');
+                return;
+            }
+            if (password.length < 6) {
+                Toast.show('Password must be at least 6 characters', 'error');
+                return;
+            }
+            if (password !== confirmPassword) {
+                Toast.show('Passwords do not match', 'error');
+                return;
+            }
+
+            const btn = document.getElementById('registerBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Registering...';
+
+            try {
+                const adminSnapshot = await db.collection('adminUsers').get();
+                const isFirstAdmin = adminSnapshot.empty;
+
+                const userCred = await auth.createUserWithEmailAndPassword(email, password);
+                const user = userCred.user;
+
+                await db.collection('adminUsers').doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    Position: position,
+                    approved: isFirstAdmin ? true : false,
+                    isSuperAdmin: isFirstAdmin ? true : false,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    uid: user.uid
+                });
+
+                await db.collection('regPosition').doc(user.uid).set({
+                    name: name,
+                    email: email,
+                    position: position,
+                    uid: user.uid,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await db.collection('activityLog').add({
+                    adminName: name,
+                    adminPosition: position,
+                    adminEmail: email,
+                    action: isFirstAdmin ? 'Registered as Super Admin (First Admin)' :
+                        'Registered as admin (pending approval)',
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                if (isFirstAdmin) {
+                    Toast.show('🎉 You are the first admin! You have been automatically approved as Super Admin.', 'success');
+                } else {
+                    Toast.show('Registration successful! Your account is pending approval.', 'success');
+                }
+
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
+                btn.disabled = false;
+                document.getElementById('regName').value = '';
+                document.getElementById('regEmail').value = '';
+                document.getElementById('regPassword').value = '';
+                document.getElementById('regConfirmPassword').value = '';
+                document.getElementById('regPosition').value = '';
+                authContainer.classList.remove("right-panel-active");
+
+            } catch (error) {
+                console.error('Registration error:', error);
+                let msg = 'Registration failed. ';
+                switch (error.code) {
+                    case 'auth/email-already-in-use':
+                        msg += 'Email already registered. Please login.';
+                        break;
+                    case 'auth/invalid-email':
+                        msg += 'Invalid email format.';
+                        break;
+                    case 'auth/weak-password':
+                        msg += 'Password too weak. Use at least 6 characters.';
+                        break;
+                    default:
+                        msg += error.message;
+                }
+                Toast.show(msg, 'error');
+                btn.innerHTML = '<i class="fas fa-user-plus"></i> Register';
+                btn.disabled = false;
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtn');
+
+            if (!email || !password) {
+                Toast.show('Please enter both email and password', 'error');
+                return;
+            }
+            loginBtn.disabled = true;
+            loginBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Logging in...';
+
+            try {
+                await auth.signInWithEmailAndPassword(email, password);
+            } catch (error) {
+                console.error('Login error:', error);
+                let msg = 'Login failed. ';
+                switch (error.code) {
+                    case 'auth/user-not-found':
+                        msg += 'Admin account not found. Please register.';
+                        break;
+                    case 'auth/wrong-password':
+                        msg += 'Incorrect password.';
+                        break;
+                    case 'auth/invalid-email':
+                        msg += 'Invalid email format.';
+                        break;
+                    case 'auth/too-many-requests':
+                        msg += 'Too many failed attempts. Try again later.';
+                        break;
+                    default:
+                        msg += error.message;
+                }
+                Toast.show(msg, 'error');
+                loginBtn.disabled = false;
+                loginBtn.innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            }
+        });
+
+        document.getElementById('forgotPasswordLink').addEventListener('click', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value.trim();
+            if (!email) {
+                Toast.show('Please enter your email address first', 'warning');
+                return;
+            }
+            auth.sendPasswordResetEmail(email)
+                .then(() => { Toast.show('Password reset link sent to your email address!', 'success'); })
+                .catch((error) => { Toast.show('Error: ' + error.message, 'error'); });
+        });
+
+        document.querySelectorAll('.social').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                Toast.show('Social login coming soon!', 'info');
+            });
+        });
+
+        async function handleLogout() {
+            try {
+                await auth.signOut();
+                showLoginPanel();
+                Toast.show('Logged out successfully', 'info');
+            } catch (error) {
+                console.error('Logout error:', error);
+                Toast.show('Logout failed: ' + error.message, 'error');
+            }
+        }
+
+        async function showAdminPanel(user) {
+            document.querySelector('.auth-wrapper').style.display = 'none';
+            document.getElementById('adminContainer').style.display = 'block';
+            document.getElementById('adminEmail').textContent = user.email;
+
+            try {
+                if (currentAdminData && currentAdminData.Position) {
+                    document.getElementById('adminPositionBadge').textContent = 'Position: ' + currentAdminData.Position;
+                } else {
+                    const doc = await db.collection('regPosition').doc(user.uid).get();
+                    if (doc.exists && doc.data().position) {
+                        document.getElementById('adminPositionBadge').textContent = 'Position: ' + doc.data().position;
+                    } else {
+                        document.getElementById('adminPositionBadge').textContent = 'Position: N/A';
+                    }
+                }
+            } catch (error) {
+                console.error('Error fetching position:', error);
+                document.getElementById('adminPositionBadge').textContent = 'Position: N/A';
+            }
+        }
+
+        function showLoginPanel() {
+            document.querySelector('.auth-wrapper').style.display = 'flex';
+            document.getElementById('adminContainer').style.display = 'none';
+            document.getElementById('loginBtn').disabled = false;
+            document.getElementById('loginBtn').innerHTML = '<i class="fas fa-sign-in-alt"></i> Login';
+            currentAdminData = null;
+        }
+
+        async function loadPendingApprovals() {
+            try {
+                const snapshot = await db.collection('adminUsers')
+                    .where('approved', '==', false)
+                    .get();
+
+                const container = document.getElementById('approvalsList');
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="approval-empty">No pending approvals</div>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    html += `
+                        <div class="approval-item" data-uid="${doc.id}">
+                            <div class="approval-info">
+                                <span class="name"><i class="fas fa-user"></i> ${data.name}</span>
+                                <span class="email"><i class="fas fa-envelope"></i> ${data.email}</span>
+                                <span class="position"><i class="fas fa-users"></i> ${data.Position || 'N/A'}</span>
+                            </div>
+                            <div class="approval-actions">
+                                <button class="btn-approve" onclick="approveAdmin('${doc.id}')">
+                                    <i class="fas fa-check"></i> Approve
+                                </button>
+                                <button class="btn-reject" onclick="rejectAdmin('${doc.id}')">
+                                    <i class="fas fa-times"></i> Reject
+                                </button>
+                            </div>
+                        </div>
+                    `;
+                });
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Load approvals error:', error);
+                document.getElementById('approvalsList').innerHTML =
+                    `<div class="approval-empty">Error loading pending requests: ${error.message}</div>`;
+            }
+        }
+
+        async function approveAdmin(uid) {
+            if (!confirm('Approve this admin?')) return;
+            try {
+                const doc = await db.collection('adminUsers').doc(uid).get();
+                const data = doc.data();
+
+                await db.collection('adminUsers').doc(uid).update({
+                    approved: true,
+                    approvedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    approvedBy: currentUser.email
+                });
+
+                await db.collection('activityLog').add({
+                    adminName: data.name,
+                    adminPosition: data.Position || 'N/A',
+                    adminEmail: data.email,
+                    action: 'Account approved by ' + currentAdminData.name,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    approvedBy: currentAdminData.name
+                });
+
+                loadPendingApprovals();
+                Toast.show('✅ Admin approved successfully!', 'success');
+
+            } catch (error) {
+                console.error('Approve error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        async function rejectAdmin(uid) {
+            if (!confirm('Reject this admin registration?')) return;
+            try {
+                const doc = await db.collection('adminUsers').doc(uid).get();
+                const data = doc.data();
+
+                await db.collection('adminUsers').doc(uid).delete();
+
+                await db.collection('activityLog').add({
+                    adminName: data.name || 'Unknown',
+                    adminPosition: data.Position || 'Unknown',
+                    adminEmail: data.email || 'Unknown',
+                    action: 'Registration rejected by ' + currentAdminData.name,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    rejectedBy: currentAdminData.name
+                });
+
+                loadPendingApprovals();
+                Toast.show('✅ Admin registration rejected.', 'success');
+
+            } catch (error) {
+                console.error('Reject error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        function openManageAdminsModal() {
+            document.getElementById('manageAdminsModal').style.display = 'block';
+            document.getElementById('manageAdminStatus').className = 'status';
+            document.getElementById('manageAdminStatus').style.display = 'none';
+            loadManageAdminList();
+        }
+
+        function closeManageAdminsModal() {
+            document.getElementById('manageAdminsModal').style.display = 'none';
+        }
+
+        async function loadManageAdminList() {
+            const container = document.getElementById('manageAdminList');
+            container.innerHTML = `
+                <div class="manage-admin-loading">
+                    <div class="spinner-small"></div>
+                    Loading admins...
+                </div>
+            `;
+
+            try {
+                const snapshot = await db.collection('adminUsers')
+                    .orderBy('createdAt', 'desc')
+                    .get();
+
+                if (snapshot.empty) {
+                    container.innerHTML = '<div class="manage-admin-empty">No admins found</div>';
+                    return;
+                }
+
+                let html = '';
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    if (!data.name) return;
+
+                    const isSuper = data.isSuperAdmin || false;
+                    const isApproved = data.approved || false;
+                    const isCurrentUser = doc.id === currentUser.uid;
+
+                    let roleBadge = '';
+                    if (!isApproved) {
+                        roleBadge = '<span class="role-badge pending">⏳ Pending</span>';
+                    } else if (isSuper) {
+                        roleBadge = '<span class="role-badge super">👑 Super Admin</span>';
+                    } else {
+                        roleBadge = '<span class="role-badge regular">Admin</span>';
+                    }
+
+                    let actionsHtml = '';
+
+                    if (isApproved) {
+                        if (isSuper) {
+                            if (!isCurrentUser) {
+                                actionsHtml += `
+                                    <button class="btn-remove-super" onclick="removeSuperAdminModal('${doc.id}')">
+                                        <i class="fas fa-user-minus"></i> Remove Super
+                                    </button>
+                                `;
+                            }
+                        } else {
+                            actionsHtml += `
+                                <button class="btn-make-super" onclick="makeSuperAdminModal('${doc.id}')">
+                                    <i class="fas fa-crown"></i> Make Super
+                                </button>
+                            `;
+                        }
+                        actionsHtml += `
+                            <button class="btn-reset-password" onclick="sendPasswordResetModal('${doc.id}')">
+                                <i class="fas fa-key"></i> Reset Password
+                            </button>
+                        `;
+                    }
+
+                    if (!isCurrentUser) {
+                        actionsHtml += `
+                            <button class="btn-delete-admin" onclick="deleteAdminModal('${doc.id}')">
+                                <i class="fas fa-trash"></i> Delete
+                            </button>
+                        `;
+                    }
+
+                    html += `
+                        <div class="manage-admin-item" data-uid="${doc.id}">
+                            <div class="admin-info">
+                                <span class="name"><i class="fas fa-user"></i> ${data.name}</span>
+                                <span class="email"><i class="fas fa-envelope"></i> ${data.email}</span>
+                                <span class="position-badge"><i class="fas fa-users"></i> ${data.Position || 'N/A'}</span>
+                                ${roleBadge}
+                                ${isCurrentUser ? '<span style="font-size:11px; color:#0A1F44; font-weight:600;">(You)</span>' : ''}
+                            </div>
+                            <div class="admin-actions">
+                                ${actionsHtml}
+                            </div>
+                        </div>
+                    `;
+                });
+
+                container.innerHTML = html;
+
+            } catch (error) {
+                console.error('Load manage admin list error:', error);
+                container.innerHTML = `<div class="manage-admin-empty">Error loading admins: ${error.message}</div>`;
+            }
+        }
+
+        async function makeSuperAdminModal(uid) {
+            if (!confirm('Make this admin a Super Admin? They will have full control over the system.')) return;
+            try {
+                const doc = await db.collection('adminUsers').doc(uid).get();
+                const data = doc.data();
+
+                await db.collection('adminUsers').doc(uid).update({
+                    isSuperAdmin: true,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await db.collection('activityLog').add({
+                    adminName: data.name,
+                    adminPosition: data.Position || 'N/A',
+                    adminEmail: data.email,
+                    action: 'Promoted to Super Admin by ' + currentAdminData.name,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    promotedBy: currentAdminData.name
+                });
+
+                Toast.show('✅ Admin promoted to Super Admin!', 'success');
+                loadManageAdminList();
+
+            } catch (error) {
+                console.error('Make super admin error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        async function removeSuperAdminModal(uid) {
+            if (!confirm('Remove Super Admin status from this admin?')) return;
+            try {
+                const doc = await db.collection('adminUsers').doc(uid).get();
+                const data = doc.data();
+
+                await db.collection('adminUsers').doc(uid).update({
+                    isSuperAdmin: false,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+
+                await db.collection('activityLog').add({
+                    adminName: data.name,
+                    adminPosition: data.Position || 'N/A',
+                    adminEmail: data.email,
+                    action: 'Super Admin status removed by ' + currentAdminData.name,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    removedBy: currentAdminData.name
+                });
+
+                Toast.show('✅ Super Admin status removed.', 'success');
+                loadManageAdminList();
+
+            } catch (error) {
+                console.error('Remove super admin error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        async function sendPasswordResetModal(uid) {
+            if (!confirm('Send password reset email to this admin?')) return;
+            try {
+                const doc = await db.collection('adminUsers').doc(uid).get();
+                const data = doc.data();
+
+                await auth.sendPasswordResetEmail(data.email);
+
+                await db.collection('activityLog').add({
+                    adminName: data.name,
+                    adminPosition: data.Position || 'N/A',
+                    adminEmail: data.email,
+                    action: 'Password reset email sent by ' + currentAdminData.name,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    sentBy: currentAdminData.name
+                });
+
+                Toast.show('✅ Password reset email sent to ' + data.email, 'success');
+
+            } catch (error) {
+                console.error('Send password reset error:', error);
+                let msg = 'Failed to send reset email. ';
+                if (error.code === 'auth/user-not-found') {
+                    msg += 'User not found in Firebase Auth.';
+                } else {
+                    msg += error.message;
+                }
+                Toast.show('❌ ' + msg, 'error');
+            }
+        }
+
+        async function deleteAdminModal(uid) {
+            if (!confirm('⚠️ Are you sure you want to delete this admin account? This action cannot be undone!')) return;
+            try {
+                const doc = await db.collection('adminUsers').doc(uid).get();
+                const data = doc.data();
+
+                await db.collection('adminUsers').doc(uid).delete();
+
+                await db.collection('activityLog').add({
+                    adminName: data.name || 'Unknown',
+                    adminPosition: data.Position || 'Unknown',
+                    adminEmail: data.email || 'Unknown',
+                    action: 'Admin account deleted by ' + currentAdminData.name,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp(),
+                    deletedBy: currentAdminData.name
+                });
+
+                Toast.show('✅ Admin deleted successfully.', 'success');
+                loadManageAdminList();
+                loadPendingApprovals();
+
+            } catch (error) {
+                console.error('Delete admin error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        async function loadDefaultCaption() {
+            try {
+                const doc = await db.collection('settings').doc('scoutbondCaption').get();
+                if (doc.exists) {
+                    defaultCaption = doc.data().caption || '';
+                    document.getElementById('defaultCaption').value = defaultCaption;
+                } else {
+                    await db.collection('settings').doc('scoutbondCaption').set({
+                        caption: 'SCOUTBOND 2026 - একসাথে আগামীর সম্ভাবনা',
+                        updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+                    });
+                    defaultCaption = 'SCOUTBOND 2026 - একসাথে আগামীর সম্ভাবনা';
+                    document.getElementById('defaultCaption').value = defaultCaption;
+                }
+            } catch (error) {
+                console.error('Load caption error:', error);
+            }
+        }
+
+        async function saveDefaultCaption() {
+            const btn = document.getElementById('saveCaptionBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+
+            const caption = document.getElementById('defaultCaption').value.trim();
+            if (!caption) {
+                Toast.show('Please enter a caption.', 'error');
+                btn.disabled = false;
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Caption';
+                return;
+            }
+
+            try {
+                await db.collection('settings').doc('scoutbondCaption').set({
+                    caption: caption,
+                    updatedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    updatedBy: currentUser.email
+                });
+
+                defaultCaption = caption;
+                await logActivity('Updated default caption: "' + caption + '"');
+                Toast.show('✅ Default caption saved successfully!', 'success');
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Caption';
+                btn.disabled = false;
+
+            } catch (error) {
+                console.error('Save caption error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+                btn.innerHTML = '<i class="fas fa-save"></i> Save Caption';
+                btn.disabled = false;
+            }
+        }
+
+        async function logActivity(action) {
+            if (!currentAdminData) return;
+            try {
+                await db.collection('activityLog').add({
+                    adminName: currentAdminData.name,
+                    adminPosition: currentAdminData.Position || 'N/A',
+                    adminEmail: currentUser.email,
+                    action: action,
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                });
+            } catch (e) { console.error('Log activity error:', e); }
+        }
+
+        document.getElementById('includeBackground').addEventListener('change', function() {
+            const card = document.getElementById('backgroundCard');
+            const isChecked = this.checked;
+            card.style.opacity = isChecked ? '1' : '0.4';
+            const inputs = card.querySelectorAll('input, button');
+            inputs.forEach(el => { el.disabled = !isChecked; });
+            if (!isChecked) {
+                document.getElementById('backgroundUpload').value = '';
+                document.getElementById('backgroundPreview').src = 'https://via.placeholder.com/200x200?text=Preview';
+                backgroundFile = null;
+                document.getElementById('uploadBackgroundBtn').disabled = true;
+            } else {
+                if (backgroundFile) {
+                    document.getElementById('uploadBackgroundBtn').disabled = false;
+                }
+            }
+        });
+
+        window.addEventListener('DOMContentLoaded', function() {
+            const cb = document.getElementById('includeBackground');
+            cb.dispatchEvent(new Event('change'));
+        });
+
+        function previewImage(input, type) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const img = new Image();
+            img.onload = function() {
+                if (Math.abs(img.width - img.height) > 10) {
+                    alert('❌ দয়া করে 1:1 অনুপাতের (বর্গাকার) ছবি আপলোড করুন।\nPlease upload a square (1:1 ratio) image.');
+                    input.value = '';
+                    document.getElementById(type === 'background' ? 'uploadBackgroundBtn' : 'uploadFrameBtn').disabled = true;
+                    return;
+                }
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('❌ ছবির সাইজ ১০MB এর বেশি হতে পারে না!\nImage size cannot exceed 10MB.');
+                    input.value = '';
+                    document.getElementById(type === 'background' ? 'uploadBackgroundBtn' : 'uploadFrameBtn').disabled = true;
+                    return;
+                }
+
+                if (type === 'background') {
+                    backgroundFile = file;
+                    document.getElementById('backgroundPreview').src = URL.createObjectURL(file);
+                    if (document.getElementById('includeBackground').checked) {
+                        document.getElementById('uploadBackgroundBtn').disabled = false;
+                    }
+                } else {
+                    frameFile = file;
+                    document.getElementById('framePreview').src = URL.createObjectURL(file);
+                    document.getElementById('uploadFrameBtn').disabled = false;
+                }
+            };
+            img.src = URL.createObjectURL(file);
+        }
+
+        async function uploadImageToImgBB(type) {
+            if (!currentUser || !currentAdminData) {
+                Toast.show('Please login first', 'error');
+                return;
+            }
+
+            const includeBg = document.getElementById('includeBackground').checked;
+            const file = type === 'background' ? backgroundFile : frameFile;
+
+            if (!file && type === 'frame') {
+                Toast.show('Please select a frame image first', 'error');
+                return;
+            }
+            if (!file && type === 'background' && includeBg) {
+                Toast.show('Please select a background image first', 'error');
+                return;
+            }
+            if (!file && type === 'background' && !includeBg) {
+                return;
+            }
+
+            if (allTemplates.length >= MAX_TEMPLATES) {
+                Toast.show('❌ Maximum ' + MAX_TEMPLATES + ' templates already exist! Delete some to add more.', 'error');
+                return;
+            }
+
+            const uploadBtn = document.getElementById(type === 'background' ? 'uploadBackgroundBtn' : 'uploadFrameBtn');
+
+            uploadBtn.disabled = true;
+            uploadBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Uploading...';
+            Toast.show('Uploading to ImgBB...', 'info');
+
+            try {
+                let imageUrl = null;
+                let deleteUrl = null;
+
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('image', file);
+                    formData.append('key', IMGBB_API_KEY);
+
+                    const response = await fetch('https://api.imgbb.com/1/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const result = await response.json();
+                    if (!result.success) {
+                        throw new Error(result.error?.message || 'ImgBB upload failed');
+                    }
+                    imageUrl = result.data.url;
+                    deleteUrl = result.data.delete_url;
+                }
+
+                const templateData = {
+                    type: 'template',
+                    frameUrl: imageUrl || '',
+                    frameDeleteUrl: deleteUrl || '',
+                    hasBackground: includeBg,
+                    backgroundUrl: includeBg ? (type === 'background' ? imageUrl : '') : '',
+                    backgroundDeleteUrl: includeBg ? (type === 'background' ? deleteUrl : '') : '',
+                    uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                    uploadedBy: currentUser.email,
+                    templateNumber: allTemplates.length + 1,
+                    source: 'imgbb',
+                    adminName: currentAdminData.name,
+                    adminPosition: currentAdminData.Position || 'N/A'
+                };
+
+                if (type === 'background' && includeBg) {
+                    await db.collection('profileMakerImages').add({
+                        type: 'background',
+                        imageBase64: imageUrl,
+                        imageUrl: imageUrl,
+                        deleteUrl: deleteUrl,
+                        uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        uploadedBy: currentUser.email,
+                        source: 'imgbb',
+                        templateNumber: allTemplates.length + 1,
+                        adminName: currentAdminData.name,
+                        adminPosition: currentAdminData.Position || 'N/A'
+                    });
+
+                    if (frameFile) {
+                        const ffd = new FormData();
+                        ffd.append('image', frameFile);
+                        ffd.append('key', IMGBB_API_KEY);
+                        const fr = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: ffd });
+                        const frResult = await fr.json();
+                        if (!frResult.success) throw new Error(frResult.error?.message || 'Frame upload failed');
+                        templateData.frameUrl = frResult.data.url;
+                        templateData.frameDeleteUrl = frResult.data.delete_url;
+                        templateData.hasBackground = true;
+
+                        await db.collection('profileMakerImages').add({
+                            type: 'frame',
+                            imageBase64: frResult.data.url,
+                            imageUrl: frResult.data.url,
+                            deleteUrl: frResult.data.delete_url,
+                            uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            uploadedBy: currentUser.email,
+                            source: 'imgbb',
+                            templateNumber: allTemplates.length + 1,
+                            adminName: currentAdminData.name,
+                            adminPosition: currentAdminData.Position || 'N/A'
+                        });
+                    }
+                    await db.collection('profileMakerTemplates').add(templateData);
+                } else if (type === 'frame') {
+                    if (includeBg && backgroundFile) {
+                        const bgfd = new FormData();
+                        bgfd.append('image', backgroundFile);
+                        bgfd.append('key', IMGBB_API_KEY);
+                        const bgRes = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: bgfd });
+                        const bgResult = await bgRes.json();
+                        if (!bgResult.success) throw new Error(bgResult.error?.message || 'Background upload failed');
+                        templateData.backgroundUrl = bgResult.data.url;
+                        templateData.backgroundDeleteUrl = bgResult.data.delete_url;
+                        templateData.hasBackground = true;
+
+                        await db.collection('profileMakerImages').add({
+                            type: 'background',
+                            imageBase64: bgResult.data.url,
+                            imageUrl: bgResult.data.url,
+                            deleteUrl: bgResult.data.delete_url,
+                            uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                            uploadedBy: currentUser.email,
+                            source: 'imgbb',
+                            templateNumber: allTemplates.length + 1,
+                            adminName: currentAdminData.name,
+                            adminPosition: currentAdminData.Position || 'N/A'
+                        });
+                    }
+                    await db.collection('profileMakerTemplates').add(templateData);
+                    await db.collection('profileMakerImages').add({
+                        type: 'frame',
+                        imageBase64: imageUrl,
+                        imageUrl: imageUrl,
+                        deleteUrl: deleteUrl,
+                        uploadedAt: firebase.firestore.FieldValue.serverTimestamp(),
+                        uploadedBy: currentUser.email,
+                        source: 'imgbb',
+                        templateNumber: allTemplates.length + 1,
+                        adminName: currentAdminData.name,
+                        adminPosition: currentAdminData.Position || 'N/A'
+                    });
+                }
+
+                await logActivity(`Created template #${allTemplates.length + 1} (${includeBg ? 'with background' : 'frame only'})`);
+
+                Toast.show('✅ Template uploaded successfully!', 'success');
+
+                document.getElementById('backgroundUpload').value = '';
+                document.getElementById('backgroundPreview').src = 'https://via.placeholder.com/200x200?text=Preview';
+                document.getElementById('frameUpload').value = '';
+                document.getElementById('framePreview').src = 'https://via.placeholder.com/200x200?text=Preview';
+                backgroundFile = null;
+                frameFile = null;
+
+                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload to ImgBB';
+                uploadBtn.disabled = true;
+                document.getElementById('uploadBackgroundBtn').disabled = true;
+                document.getElementById('uploadFrameBtn').disabled = true;
+
+                loadTemplates();
+
+            } catch (error) {
+                console.error('Upload error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+                uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload to ImgBB';
+                uploadBtn.disabled = false;
+            }
+        }
+
+        async function loadTemplates() {
+            if (!currentUser) return;
+            document.getElementById('loadingImages').classList.add('show');
+            document.getElementById('templatesGrid').innerHTML = '';
+            document.getElementById('emptyState').style.display = 'none';
+
+            try {
+                const snapshot = await db.collection('profileMakerTemplates')
+                    .orderBy('uploadedAt', 'desc')
+                    .get();
+
+                document.getElementById('loadingImages').classList.remove('show');
+
+                if (snapshot.empty) {
+                    document.getElementById('emptyState').style.display = 'block';
+                    allTemplates = [];
+                    document.getElementById('templateCount').textContent = '0 Templates';
+                    return;
+                }
+
+                allTemplates = [];
+                const grid = document.getElementById('templatesGrid');
+                grid.innerHTML = '';
+
+                snapshot.forEach((doc, index) => {
+                    const data = doc.data();
+                    data.id = doc.id;
+                    data.index = index;
+                    allTemplates.push(data);
+                    grid.appendChild(createTemplateCard(data, index));
+                });
+
+                document.getElementById('templateCount').textContent = allTemplates.length + ' Templates';
+
+            } catch (error) {
+                console.error('Load error:', error);
+                document.getElementById('loadingImages').classList.remove('show');
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('emptyState').innerHTML = `
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error Loading Templates</h3>
+                    <p>${error.message}</p>
+                `;
+            }
+        }
+
+        function createTemplateCard(data, index) {
+            const card = document.createElement('div');
+            card.className = 'template-card';
+
+            const header = document.createElement('div');
+            header.className = 'template-header';
+            header.innerHTML = `
+                <h4><i class="fas fa-layer-group"></i> Template #${index + 1}</h4>
+                <span style="font-size:12px; background: rgba(255,255,255,0.2); padding:2px 10px; border-radius:12px;">
+                    ${data.hasBackground ? 'With BG' : 'Frame Only'}
+                </span>
+            `;
+
+            const body = document.createElement('div');
+            body.className = 'template-body';
+            body.innerHTML = `
+                <div class="preview-item">
+                    <label><i class="fas fa-image"></i> Background</label>
+                    <img src="${data.hasBackground && data.backgroundUrl ? data.backgroundUrl : 'https://via.placeholder.com/200x120?text=No+Background'}" 
+                         alt="Background" 
+                         style="${!data.hasBackground || !data.backgroundUrl ? 'opacity:0.4;' : ''}">
+                </div>
+                <div class="preview-item">
+                    <label><i class="fas fa-frame"></i> Frame</label>
+                    <img src="${data.frameUrl || 'https://via.placeholder.com/200x120?text=No+Frame'}" 
+                         alt="Frame"
+                         style="${!data.frameUrl ? 'opacity:0.4;' : ''}">
+                </div>
+            `;
+
+            const actions = document.createElement('div');
+            actions.className = 'template-actions';
+            actions.innerHTML = `
+                <button class="btn-sm btn-sm-edit" onclick="openEditModal('${data.id}')">
+                    <i class="fas fa-edit"></i> Edit
+                </button>
+                <button class="btn-sm btn-sm-delete" onclick="deleteTemplate('${data.id}')">
+                    <i class="fas fa-trash"></i> Delete
+                </button>
+            `;
+
+            card.appendChild(header);
+            card.appendChild(body);
+            card.appendChild(actions);
+            return card;
+        }
+
+        function openEditModal(templateId) {
+            const template = allTemplates.find(t => t.id === templateId);
+            if (!template) return;
+
+            editingTemplateId = templateId;
+            document.getElementById('editTemplateNumber').textContent = allTemplates.indexOf(template) + 1;
+            document.getElementById('editIncludeBackground').checked = template.hasBackground || false;
+            document.getElementById('editBackgroundGroup').style.display = template.hasBackground ? 'block' : 'none';
+            document.getElementById('editBackgroundPreview').src = template.hasBackground && template.backgroundUrl ?
+                template.backgroundUrl : 'https://via.placeholder.com/100?text=No+Image';
+            document.getElementById('editFramePreview').src = template.frameUrl ?
+                template.frameUrl : 'https://via.placeholder.com/100?text=No+Image';
+
+            document.getElementById('editBackgroundUpload').value = '';
+            document.getElementById('editFrameUpload').value = '';
+            editBackgroundFile = null;
+            editFrameFile = null;
+
+            document.getElementById('editModal').style.display = 'block';
+            document.getElementById('editStatus').className = 'status';
+            document.getElementById('editStatus').style.display = 'none';
+        }
+
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+            editingTemplateId = null;
+        }
+
+        function previewEditImage(input, type) {
+            const file = input.files[0];
+            if (!file) return;
+            const img = new Image();
+            img.onload = function() {
+                if (Math.abs(img.width - img.height) > 10) {
+                    alert('❌ দয়া করে 1:1 অনুপাতের (বর্গাকার) ছবি আপলোড করুন।\nPlease upload a square (1:1 ratio) image.');
+                    input.value = '';
+                    return;
+                }
+                if (file.size > 10 * 1024 * 1024) {
+                    alert('❌ ছবির সাইজ ১০MB এর বেশি হতে পারে না!\nImage size cannot exceed 10MB.');
+                    input.value = '';
+                    return;
+                }
+                if (type === 'background') {
+                    editBackgroundFile = file;
+                    document.getElementById('editBackgroundPreview').src = URL.createObjectURL(file);
+                } else {
+                    editFrameFile = file;
+                    document.getElementById('editFramePreview').src = URL.createObjectURL(file);
+                }
+            };
+            img.src = URL.createObjectURL(file);
+        }
+
+        async function saveTemplateEdit() {
+            if (!editingTemplateId) return;
+            const template = allTemplates.find(t => t.id === editingTemplateId);
+            if (!template) return;
+
+            const includeBg = document.getElementById('editIncludeBackground').checked;
+            const statusDiv = document.getElementById('editStatus');
+            statusDiv.style.display = 'flex';
+            statusDiv.className = 'status info show';
+            statusDiv.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving changes...';
+
+            try {
+                const updateData = { hasBackground: includeBg };
+
+                if (editBackgroundFile && includeBg) {
+                    const fd = new FormData();
+                    fd.append('image', editBackgroundFile);
+                    fd.append('key', IMGBB_API_KEY);
+                    const res = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: fd });
+                    const result = await res.json();
+                    if (!result.success) throw new Error(result.error?.message || 'Background upload failed');
+                    updateData.backgroundUrl = result.data.url;
+                    updateData.backgroundDeleteUrl = result.data.delete_url;
+
+                    const bgSnap = await db.collection('profileMakerImages')
+                        .where('type', '==', 'background')
+                        .where('templateNumber', '==', allTemplates.indexOf(template) + 1)
+                        .get();
+                    bgSnap.forEach(doc => {
+                        db.collection('profileMakerImages').doc(doc.id).update({
+                            imageBase64: result.data.url,
+                            imageUrl: result.data.url,
+                            deleteUrl: result.data.delete_url
+                        });
+                    });
+                }
+
+                if (editFrameFile) {
+                    const fd = new FormData();
+                    fd.append('image', editFrameFile);
+                    fd.append('key', IMGBB_API_KEY);
+                    const res = await fetch('https://api.imgbb.com/1/upload', { method: 'POST', body: fd });
+                    const result = await res.json();
+                    if (!result.success) throw new Error(result.error?.message || 'Frame upload failed');
+                    updateData.frameUrl = result.data.url;
+                    updateData.frameDeleteUrl = result.data.delete_url;
+
+                    const fSnap = await db.collection('profileMakerImages')
+                        .where('type', '==', 'frame')
+                        .where('templateNumber', '==', allTemplates.indexOf(template) + 1)
+                        .get();
+                    fSnap.forEach(doc => {
+                        db.collection('profileMakerImages').doc(doc.id).update({
+                            imageBase64: result.data.url,
+                            imageUrl: result.data.url,
+                            deleteUrl: result.data.delete_url
+                        });
+                    });
+                }
+
+                updateData.uploadedAt = firebase.firestore.FieldValue.serverTimestamp();
+                await db.collection('profileMakerTemplates').doc(editingTemplateId).update(updateData);
+
+                await logActivity(`Edited template #${allTemplates.indexOf(template) + 1}`);
+
+                statusDiv.className = 'status success show';
+                statusDiv.innerHTML = '<i class="fas fa-check-circle"></i> Template updated successfully!';
+                setTimeout(() => statusDiv.style.display = 'none', 3000);
+
+                loadTemplates();
+                closeEditModal();
+
+            } catch (error) {
+                console.error('Edit error:', error);
+                statusDiv.className = 'status error show';
+                statusDiv.innerHTML = '❌ Error: ' + error.message;
+            }
+        }
+
+        async function deleteTemplate(templateId) {
+            if (!confirm('Are you sure you want to delete this template?')) return;
+            try {
+                const template = allTemplates.find(t => t.id === templateId);
+                if (!template) return;
+
+                const templateNum = allTemplates.indexOf(template) + 1;
+
+                await db.collection('profileMakerTemplates').doc(templateId).delete();
+
+                const imgSnap = await db.collection('profileMakerImages')
+                    .where('templateNumber', '==', templateNum)
+                    .get();
+                imgSnap.forEach(doc => db.collection('profileMakerImages').doc(doc.id).delete());
+
+                if (template.backgroundDeleteUrl) {
+                    try { await fetch(template.backgroundDeleteUrl, { method: 'DELETE' }); } catch (e) { /* ignore */ }
+                }
+                if (template.frameDeleteUrl) {
+                    try { await fetch(template.frameDeleteUrl, { method: 'DELETE' }); } catch (e) { /* ignore */ }
+                }
+
+                await logActivity(`Deleted template #${templateNum}`);
+
+                Toast.show('✅ Template deleted successfully!', 'success');
+                loadTemplates();
+
+            } catch (error) {
+                console.error('Delete error:', error);
+                Toast.show('❌ Error: ' + error.message, 'error');
+            }
+        }
+
+        window.onclick = function(e) {
+            const editModal = document.getElementById('editModal');
+            if (e.target === editModal) closeEditModal();
+            const manageModal = document.getElementById('manageAdminsModal');
+            if (e.target === manageModal) closeManageAdminsModal();
+        };
+
+        function togglePassword(inputId, iconElement) {
+            const input = document.getElementById(inputId);
+            if (input.type === 'password') {
+                input.type = 'text';
+                iconElement.classList.remove('fa-eye');
+                iconElement.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                iconElement.classList.remove('fa-eye-slash');
+                iconElement.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>

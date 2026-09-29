@@ -1,0 +1,1168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Activity Log · SCOUTBOND 2026</title>
+    
+    <link rel="icon" href="https://i.ibb.co/6J4kRXWG/1000025032.png" type="image/png">
+    <link rel="apple-touch-icon" href="https://i.ibb.co/6J4kRXWG/1000025032.png">
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0A1F44 0%, #1E3A8A 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #333;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        /* Header */
+        .page-header {
+            background: white;
+            border-radius: 18px;
+            padding: 25px 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.25);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+            border-bottom: 4px solid #0A1F44;
+        }
+        
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+        
+        .header-logo {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 4px 12px rgba(10,31,68,0.2);
+            transition: transform 0.3s;
+        }
+        
+        .header-logo:hover {
+            transform: scale(1.08) rotate(5deg);
+        }
+        
+        .header-title h1 {
+            color: #0A1F44;
+            font-size: 24px;
+            font-weight: 800;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            letter-spacing: 0.3px;
+        }
+        
+        .header-title h1 i {
+            color: #1E3A8A;
+        }
+        
+        .header-title p {
+            color: #666;
+            font-size: 13px;
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Poppins', sans-serif;
+            text-decoration: none;
+        }
+        
+        .btn-primary {
+            background: #0A1F44;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #1E3A8A;
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(10,31,68,0.3);
+        }
+        
+        .btn-success {
+            background: #28a745;
+            color: white;
+        }
+        .btn-success:hover {
+            background: #218838;
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background: #e0e0e0;
+            color: #333;
+        }
+        .btn-secondary:hover {
+            background: #cccccc;
+            transform: translateY(-2px);
+        }
+        
+        /* Stats Cards */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 16px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: 14px;
+            padding: 18px 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            border-left: 4px solid #0A1F44;
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+        
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: white;
+            background: linear-gradient(135deg, #0A1F44, #1E3A8A);
+            flex-shrink: 0;
+        }
+        
+        .stat-icon.orange { background: linear-gradient(135deg, #f57c00, #ff9800); }
+        .stat-icon.green { background: linear-gradient(135deg, #2e7d32, #43a047); }
+        .stat-icon.red { background: linear-gradient(135deg, #c62828, #e53935); }
+        
+        .stat-info .stat-number {
+            font-size: 24px;
+            font-weight: 800;
+            color: #0A1F44;
+            line-height: 1;
+        }
+        
+        .stat-info .stat-label {
+            font-size: 12px;
+            color: #777;
+            font-weight: 500;
+            margin-top: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Filters */
+        .filters-bar {
+            background: white;
+            border-radius: 14px;
+            padding: 16px 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        
+        .filters-bar .search-box {
+            flex: 1;
+            min-width: 220px;
+            position: relative;
+        }
+        
+        .filters-bar .search-box input {
+            width: 100%;
+            padding: 10px 15px 10px 40px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            transition: all 0.3s;
+            background: #f8f9fa;
+        }
+        
+        .filters-bar .search-box input:focus {
+            outline: none;
+            border-color: #0A1F44;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(10,31,68,0.1);
+        }
+        
+        .filters-bar .search-box i {
+            position: absolute;
+            left: 14px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #999;
+            font-size: 14px;
+        }
+        
+        .filters-bar select {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 14px;
+            font-family: 'Poppins', sans-serif;
+            background: #f8f9fa;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        .filters-bar select:focus {
+            outline: none;
+            border-color: #0A1F44;
+            background: white;
+        }
+        
+        /* Log List */
+        .log-container {
+            background: white;
+            border-radius: 18px;
+            padding: 20px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
+            min-height: 400px;
+        }
+        
+        .log-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .log-item {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 16px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 14px;
+            transition: all 0.3s;
+            border-left: 4px solid #0A1F44;
+            animation: fadeInUp 0.4s ease;
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .log-item:hover {
+            background: #eef2f9;
+            transform: translateX(4px);
+            box-shadow: 0 6px 15px rgba(10,31,68,0.1);
+        }
+        
+        .log-item.action-create { border-left-color: #28a745; }
+        .log-item.action-edit { border-left-color: #f57c00; }
+        .log-item.action-delete { border-left-color: #dc3545; }
+        .log-item.action-approve { border-left-color: #17a2b8; }
+        .log-item.action-promote { border-left-color: #6f42c1; }
+        
+        .log-left {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            flex: 1;
+            min-width: 280px;
+        }
+        
+        .log-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 16px;
+            color: white;
+            flex-shrink: 0;
+            background: linear-gradient(135deg, #0A1F44, #1E3A8A);
+        }
+        
+        .log-icon.create { background: linear-gradient(135deg, #2e7d32, #43a047); }
+        .log-icon.edit { background: linear-gradient(135deg, #ef6c00, #fb8c00); }
+        .log-icon.delete { background: linear-gradient(135deg, #c62828, #e53935); }
+        .log-icon.approve { background: linear-gradient(135deg, #00838f, #00acc1); }
+        .log-icon.promote { background: linear-gradient(135deg, #4527a0, #5e35b1); }
+        
+        .log-details {
+            flex: 1;
+        }
+        
+        .log-action {
+            font-weight: 600;
+            color: #1a1a2e;
+            font-size: 14.5px;
+            line-height: 1.4;
+        }
+        
+        .log-admin {
+            font-size: 12.5px;
+            color: #666;
+            margin-top: 4px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+        
+        .log-admin .badge {
+            background: #e8f0fe;
+            color: #1a73e8;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+        
+        .log-time {
+            font-size: 12px;
+            color: #999;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            white-space: nowrap;
+            background: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 1px solid #e0e0e0;
+        }
+        
+        .log-time i {
+            color: #0A1F44;
+        }
+        
+        /* Loading & Empty */
+        .loading-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #666;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(10,31,68,0.1);
+            border-top: 4px solid #0A1F44;
+            border-radius: 50%;
+            width: 45px;
+            height: 45px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 15px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        
+        .empty-state i {
+            font-size: 60px;
+            color: #0A1F44;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+        
+        .empty-state h3 {
+            color: #666;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        
+        .empty-state p {
+            font-size: 14px;
+            color: #999;
+        }
+        
+        /* Pagination */
+        .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .pagination button {
+            padding: 8px 14px;
+            border: 2px solid #e0e0e0;
+            background: white;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+            font-size: 13px;
+            color: #333;
+        }
+        
+        .pagination button:hover:not(:disabled) {
+            border-color: #0A1F44;
+            background: #f0f4fc;
+            color: #0A1F44;
+        }
+        
+        .pagination button.active {
+            background: #0A1F44;
+            border-color: #0A1F44;
+            color: white;
+        }
+        
+        .pagination button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+        
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            padding: 14px 22px;
+            background: #0A1F44;
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(80px);
+            opacity: 0;
+            transition: all 0.35s ease;
+            z-index: 9999;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            font-weight: 500;
+            max-width: 90%;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        .toast.success { background: #28a745; }
+        .toast.error { background: #dc3545; }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            margin-top: 25px;
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+            line-height: 1.6;
+        }
+        
+        .footer a {
+            color: #ffec99;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        
+        .footer a:hover {
+            color: white;
+            text-decoration: underline;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .page-header {
+                flex-direction: column;
+                align-items: stretch;
+                text-align: center;
+                padding: 20px;
+            }
+            
+            .header-left {
+                justify-content: center;
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .header-title h1 {
+                font-size: 20px;
+                justify-content: center;
+            }
+            
+            .header-actions {
+                justify-content: center;
+            }
+            
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .filters-bar {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .filters-bar .search-box {
+                min-width: auto;
+            }
+            
+            .log-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .log-time {
+                align-self: flex-end;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 10px;
+            }
+            
+            .page-header {
+                padding: 16px;
+                border-radius: 14px;
+            }
+            
+            .header-logo {
+                width: 50px;
+                height: 50px;
+            }
+            
+            .header-title h1 {
+                font-size: 17px;
+            }
+            
+            .stats-grid {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .stat-card {
+                padding: 14px 16px;
+            }
+            
+            .stat-icon {
+                width: 40px;
+                height: 40px;
+                font-size: 18px;
+            }
+            
+            .stat-info .stat-number {
+                font-size: 20px;
+            }
+            
+            .log-container {
+                padding: 14px;
+                border-radius: 14px;
+            }
+            
+            .log-item {
+                padding: 12px 14px;
+            }
+            
+            .log-left {
+                min-width: auto;
+                gap: 10px;
+            }
+            
+            .log-icon {
+                width: 36px;
+                height: 36px;
+                font-size: 14px;
+            }
+            
+            .log-action {
+                font-size: 13px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="page-header">
+            <div class="header-left">
+                <img class="header-logo" src="https://i.ibb.co/6J4kRXWG/1000025032.png" alt="SCOUTBOND 2026">
+                <div class="header-title">
+                    <h1><i class="fas fa-history"></i> Activity Log</h1>
+                    <p>SCOUTBOND 2026 · Hossainshahi Open Scout Group</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn btn-primary" onclick="loadActivityLog()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button class="btn btn-success" onclick="exportToCSV()">
+                    <i class="fas fa-file-csv"></i> Export CSV
+                </button>
+                <a href="admin.html" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Admin
+                </a>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid" id="statsGrid">
+            <div class="stat-card">
+                <div class="stat-icon">
+                    <i class="fas fa-list"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statTotal">0</div>
+                    <div class="stat-label">Total Actions</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <i class="fas fa-plus-circle"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statCreate">0</div>
+                    <div class="stat-label">Creates</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <i class="fas fa-edit"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statEdit">0</div>
+                    <div class="stat-label">Edits</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <i class="fas fa-trash-alt"></i>
+                </div>
+                <div class="stat-info">
+                    <div class="stat-number" id="statDelete">0</div>
+                    <div class="stat-label">Deletes</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Filters -->
+        <div class="filters-bar">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Search by admin name, email, or action..." oninput="applyFilters()">
+            </div>
+            <select id="filterType" onchange="applyFilters()">
+                <option value="all">All Actions</option>
+                <option value="create">Creates</option>
+                <option value="edit">Edits</option>
+                <option value="delete">Deletes</option>
+                <option value="approve">Approvals</option>
+                <option value="promote">Promotions</option>
+            </select>
+            <select id="filterTime" onchange="applyFilters()">
+                <option value="all">All Time</option>
+                <option value="today">Today</option>
+                <option value="week">This Week</option>
+                <option value="month">This Month</option>
+            </select>
+        </div>
+
+        <!-- Log Container -->
+        <div class="log-container">
+            <div class="loading-state" id="loadingState">
+                <div class="spinner"></div>
+                <p style="color:#0A1F44; font-weight:600;">Loading activity log...</p>
+            </div>
+            
+            <div class="log-list" id="logList" style="display:none;"></div>
+            
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <i class="fas fa-inbox"></i>
+                <h3>No Activity Found</h3>
+                <p>There are no activity logs matching your filters.</p>
+            </div>
+            
+            <div class="pagination" id="pagination" style="display:none;"></div>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <div>© <span id="year"></span> Hossainshahi Open Scout Group · SCOUTBOND 2026</div>
+            <div style="margin-top:6px;">
+                Developed by <a href="https://rovermdashfaq.github.io/portfolio/" target="_blank">Md. Ashfaqur Rahman Tanim</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle" id="toastIcon"></i>
+        <span id="toastMessage">Success</span>
+    </div>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+
+    <script>
+        // ============================================================
+        //  FIREBASE CONFIG
+        // ============================================================
+        const firebaseConfig = {
+            apiKey: "AIzaSyDtE8AyzWg16ZxtsQu5u_ylHfwblqysb28",
+            authDomain: "hossenshahi-anniversary.firebaseapp.com",
+            projectId: "hossenshahi-anniversary",
+            storageBucket: "hossenshahi-anniversary.firebasestorage.app",
+            messagingSenderId: "490105238435",
+            appId: "1:490105238435:web:575e4da4c6bcbdecf6e016"
+        };
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // ============================================================
+        //  STATE
+        // ============================================================
+        let allLogs = [];
+        let filteredLogs = [];
+        let currentPage = 1;
+        const LOGS_PER_PAGE = 15;
+        let currentUser = null;
+        let isAdmin = false;
+
+        document.getElementById('year').textContent = new Date().getFullYear();
+
+        // ============================================================
+        //  AUTH CHECK
+        // ============================================================
+        auth.onAuthStateChanged(async (user) => {
+            if (!user) {
+                showToast('Please login as admin to view activity log', 'error');
+                setTimeout(() => { window.location.href = 'admin.html'; }, 1500);
+                return;
+            }
+            
+            currentUser = user;
+            
+            try {
+                const doc = await db.collection('adminUsers').doc(user.uid).get();
+                if (!doc.exists || doc.data().approved !== true) {
+                    showToast('Access denied. Admin only.', 'error');
+                    setTimeout(() => { window.location.href = 'admin.html'; }, 1500);
+                    return;
+                }
+                
+                isAdmin = true;
+                await loadActivityLog();
+                
+            } catch (error) {
+                console.error('Auth error:', error);
+                showToast('Authentication failed', 'error');
+            }
+        });
+
+        // ============================================================
+        //  LOAD ACTIVITY LOG
+        // ============================================================
+        async function loadActivityLog() {
+            document.getElementById('loadingState').style.display = 'block';
+            document.getElementById('logList').style.display = 'none';
+            document.getElementById('emptyState').style.display = 'none';
+            document.getElementById('pagination').style.display = 'none';
+            
+            try {
+                const snapshot = await db.collection('activityLog')
+                    .orderBy('timestamp', 'desc')
+                    .limit(500)
+                    .get();
+                
+                allLogs = [];
+                snapshot.forEach(doc => {
+                    const data = doc.data();
+                    allLogs.push({
+                        id: doc.id,
+                        adminName: data.adminName || 'Unknown Admin',
+                        adminPosition: data.adminPosition || 'N/A',
+                        adminEmail: data.adminEmail || '',
+                        action: data.action || 'Unknown action',
+                        timestamp: data.timestamp
+                    });
+                });
+                
+                updateStats();
+                applyFilters();
+                
+            } catch (error) {
+                console.error('Load error:', error);
+                document.getElementById('loadingState').style.display = 'none';
+                document.getElementById('emptyState').style.display = 'block';
+                document.getElementById('emptyState').innerHTML = `
+                    <i class="fas fa-exclamation-triangle" style="color:#dc3545;"></i>
+                    <h3>Error Loading Activity Log</h3>
+                    <p>${error.message}</p>
+                `;
+                showToast('❌ Failed to load activity log', 'error');
+            }
+        }
+
+        // ============================================================
+        //  UPDATE STATS
+        // ============================================================
+        function updateStats() {
+            document.getElementById('statTotal').textContent = allLogs.length;
+            
+            let createCount = 0, editCount = 0, deleteCount = 0;
+            
+            allLogs.forEach(log => {
+                const action = log.action.toLowerCase();
+                if (action.includes('creat') || action.includes('upload') || action.includes('add')) createCount++;
+                if (action.includes('edit') || action.includes('updat')) editCount++;
+                if (action.includes('delet') || action.includes('remov') || action.includes('reject')) deleteCount++;
+            });
+            
+            document.getElementById('statCreate').textContent = createCount;
+            document.getElementById('statEdit').textContent = editCount;
+            document.getElementById('statDelete').textContent = deleteCount;
+        }
+
+        // ============================================================
+        //  APPLY FILTERS
+        // ============================================================
+        function applyFilters() {
+            const searchTerm = document.getElementById('searchInput').value.toLowerCase().trim();
+            const typeFilter = document.getElementById('filterType').value;
+            const timeFilter = document.getElementById('filterTime').value;
+            
+            const now = new Date();
+            const startOfToday = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const startOfWeek = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+            const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+            
+            filteredLogs = allLogs.filter(log => {
+                // Search filter
+                if (searchTerm) {
+                    const searchable = `${log.adminName} ${log.adminEmail} ${log.action} ${log.adminPosition}`.toLowerCase();
+                    if (!searchable.includes(searchTerm)) return false;
+                }
+                
+                // Type filter
+                if (typeFilter !== 'all') {
+                    const action = log.action.toLowerCase();
+                    if (typeFilter === 'create' && !action.includes('creat') && !action.includes('upload') && !action.includes('add')) return false;
+                    if (typeFilter === 'edit' && !action.includes('edit') && !action.includes('updat')) return false;
+                    if (typeFilter === 'delete' && !action.includes('delet') && !action.includes('remov') && !action.includes('reject')) return false;
+                    if (typeFilter === 'approve' && !action.includes('approv')) return false;
+                    if (typeFilter === 'promote' && !action.includes('promot') && !action.includes('super admin')) return false;
+                }
+                
+                // Time filter
+                if (timeFilter !== 'all' && log.timestamp) {
+                    const logDate = log.timestamp.toDate ? log.timestamp.toDate() : new Date(log.timestamp);
+                    if (timeFilter === 'today' && logDate < startOfToday) return false;
+                    if (timeFilter === 'week' && logDate < startOfWeek) return false;
+                    if (timeFilter === 'month' && logDate < startOfMonth) return false;
+                }
+                
+                return true;
+            });
+            
+            currentPage = 1;
+            renderLogs();
+        }
+
+        // ============================================================
+        //  RENDER LOGS
+        // ============================================================
+        function renderLogs() {
+            document.getElementById('loadingState').style.display = 'none';
+            const logList = document.getElementById('logList');
+            const emptyState = document.getElementById('emptyState');
+            const pagination = document.getElementById('pagination');
+            
+            if (filteredLogs.length === 0) {
+                logList.style.display = 'none';
+                emptyState.style.display = 'block';
+                pagination.style.display = 'none';
+                return;
+            }
+            
+            emptyState.style.display = 'none';
+            logList.style.display = 'flex';
+            
+            const totalPages = Math.ceil(filteredLogs.length / LOGS_PER_PAGE);
+            const startIdx = (currentPage - 1) * LOGS_PER_PAGE;
+            const endIdx = startIdx + LOGS_PER_PAGE;
+            const pageLogs = filteredLogs.slice(startIdx, endIdx);
+            
+            logList.innerHTML = pageLogs.map(log => createLogItem(log)).join('');
+            
+            // Pagination
+            if (totalPages > 1) {
+                pagination.style.display = 'flex';
+                renderPagination(totalPages);
+            } else {
+                pagination.style.display = 'none';
+            }
+        }
+
+        // ============================================================
+        //  CREATE LOG ITEM
+        // ============================================================
+        function createLogItem(log) {
+            const action = log.action.toLowerCase();
+            let iconClass = '';
+            let iconName = 'info-circle';
+            let actionClass = '';
+            
+            if (action.includes('creat') || action.includes('upload') || action.includes('add')) {
+                iconClass = 'create';
+                iconName = 'plus-circle';
+                actionClass = 'action-create';
+            } else if (action.includes('edit') || action.includes('updat')) {
+                iconClass = 'edit';
+                iconName = 'edit';
+                actionClass = 'action-edit';
+            } else if (action.includes('delet') || action.includes('remov') || action.includes('reject')) {
+                iconClass = 'delete';
+                iconName = 'trash-alt';
+                actionClass = 'action-delete';
+            } else if (action.includes('approv')) {
+                iconClass = 'approve';
+                iconName = 'check-circle';
+                actionClass = 'action-approve';
+            } else if (action.includes('promot') || action.includes('super admin')) {
+                iconClass = 'promote';
+                iconName = 'crown';
+                actionClass = 'action-promote';
+            }
+            
+            const timeStr = formatTime(log.timestamp);
+            
+            return `
+                <div class="log-item ${actionClass}">
+                    <div class="log-left">
+                        <div class="log-icon ${iconClass}">
+                            <i class="fas fa-${iconName}"></i>
+                        </div>
+                        <div class="log-details">
+                            <div class="log-action">${escapeHtml(log.action)}</div>
+                            <div class="log-admin">
+                                <span><i class="fas fa-user"></i> ${escapeHtml(log.adminName)}</span>
+                                <span class="badge">${escapeHtml(log.adminPosition)}</span>
+                                ${log.adminEmail ? `<span><i class="fas fa-envelope"></i> ${escapeHtml(log.adminEmail)}</span>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="log-time">
+                        <i class="far fa-clock"></i> ${timeStr}
+                    </div>
+                </div>
+            `;
+        }
+
+        // ============================================================
+        //  FORMAT TIME
+        // ============================================================
+        function formatTime(timestamp) {
+            if (!timestamp) return 'Unknown time';
+            
+            try {
+                const date = timestamp.toDate ? timestamp.toDate() : new Date(timestamp);
+                const now = new Date();
+                const diff = now - date;
+                
+                const seconds = Math.floor(diff / 1000);
+                const minutes = Math.floor(seconds / 60);
+                const hours = Math.floor(minutes / 60);
+                const days = Math.floor(hours / 24);
+                
+                if (seconds < 60) return 'Just now';
+                if (minutes < 60) return `${minutes}m ago`;
+                if (hours < 24) return `${hours}h ago`;
+                if (days < 7) return `${days}d ago`;
+                
+                return date.toLocaleDateString('en-US', {
+                    day: 'numeric',
+                    month: 'short',
+                    year: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                });
+            } catch (e) {
+                return 'Unknown time';
+            }
+        }
+
+        // ============================================================
+        //  PAGINATION
+        // ============================================================
+        function renderPagination(totalPages) {
+            const pagination = document.getElementById('pagination');
+            let html = '';
+            
+            html += `<button onclick="goToPage(${currentPage - 1})" ${currentPage === 1 ? 'disabled' : ''}>
+                <i class="fas fa-chevron-left"></i> Prev
+            </button>`;
+            
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+            
+            if (startPage > 1) {
+                html += `<button onclick="goToPage(1)">1</button>`;
+                if (startPage > 2) html += `<span style="padding:0 4px; color:#999;">...</span>`;
+            }
+            
+            for (let i = startPage; i <= endPage; i++) {
+                html += `<button onclick="goToPage(${i})" class="${i === currentPage ? 'active' : ''}">${i}</button>`;
+            }
+            
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) html += `<span style="padding:0 4px; color:#999;">...</span>`;
+                html += `<button onclick="goToPage(${totalPages})">${totalPages}</button>`;
+            }
+            
+            html += `<button onclick="goToPage(${currentPage + 1})" ${currentPage === totalPages ? 'disabled' : ''}>
+                Next <i class="fas fa-chevron-right"></i>
+            </button>`;
+            
+            pagination.innerHTML = html;
+        }
+
+        function goToPage(page) {
+            const totalPages = Math.ceil(filteredLogs.length / LOGS_PER_PAGE);
+            if (page < 1 || page > totalPages) return;
+            currentPage = page;
+            renderLogs();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // ============================================================
+        //  EXPORT TO CSV
+        // ============================================================
+        function exportToCSV() {
+            if (filteredLogs.length === 0) {
+                showToast('No logs to export', 'error');
+                return;
+            }
+            
+            const headers = ['Admin Name', 'Position', 'Email', 'Action', 'Timestamp'];
+            const rows = filteredLogs.map(log => {
+                const date = log.timestamp?.toDate ? log.timestamp.toDate() : new Date(log.timestamp);
+                return [
+                    log.adminName,
+                    log.adminPosition,
+                    log.adminEmail,
+                    log.action,
+                    date.toLocaleString('en-US')
+                ];
+            });
+            
+            const csvContent = [
+                headers.join(','),
+                ...rows.map(row => row.map(cell => `"${String(cell).replace(/"/g, '""')}"`).join(','))
+            ].join('\n');
+            
+            const blob = new Blob(['\ufeff' + csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+            link.setAttribute('href', url);
+            link.setAttribute('download', `SCOUTBOND-2026-Activity-Log-${new Date().toISOString().slice(0,10)}.csv`);
+            link.style.visibility = 'hidden';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showToast('✅ Activity log exported to CSV', 'success');
+        }
+
+        // ============================================================
+        //  HELPERS
+        // ============================================================
+        function escapeHtml(text) {
+            if (!text) return '';
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toastMessage');
+            const toastIcon = document.getElementById('toastIcon');
+            
+            toastMsg.textContent = message;
+            toast.className = 'toast show';
+            
+            if (type === 'success') {
+                toast.classList.add('success');
+                toastIcon.className = 'fas fa-check-circle';
+            } else if (type === 'error') {
+                toast.classList.add('error');
+                toastIcon.className = 'fas fa-exclamation-circle';
+            } else {
+                toastIcon.className = 'fas fa-info-circle';
+            }
+            
+            clearTimeout(toast._timer);
+            toast._timer = setTimeout(() => {
+                toast.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

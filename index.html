@@ -211,6 +211,7 @@
         .api-status.connected { background:#d4edda; color:#155724; border:1px solid #c3e6cb; }
         .api-status.disconnected { background:#f8d7da; color:#721c24; border:1px solid #f5c6cb; }
         .api-status.processing { background:#cce7ff; color:#004085; border:1px solid #b3d7ff; }
+        .api-status.disabled { background:#e2e3e5; color:#383d41; border:1px solid #d6d8db; }
         .progress-bar { width:100%; height:6px; background:#e0e0e0; border-radius:3px; margin-top:10px; overflow:hidden; display:none; }
         .progress-fill { height:100%; background:var(--primary); border-radius:3px; width:0%; transition:width 0.3s ease; }
         .bg-removal-card { max-width:260px; margin:20px auto; padding:20px; border-radius:16px; background:linear-gradient(135deg,#f8fafc,#ffffff); box-shadow:0 10px 25px rgba(0,0,0,0.08); font-family:'Inter','Segoe UI',system-ui,sans-serif; text-align:center; transition:transform 0.3s ease,box-shadow 0.3s ease; }
@@ -223,7 +224,7 @@
         .bg-link div { text-align:left; }
         .bg-link div strong { display:block; }
         .bg-link div span { font-size:11px; color:rgba(255,255,255,0.9); font-weight:400; }
-        .frame-toggle { display:flex; align-items:center; gap:10px; margin-top:10px; }
+        .frame-toggle { display:flex; align-items:center; gap:10px; margin-top:10px; flex-wrap:wrap; }
         .toggle-switch { position:relative; display:inline-block; width:50px; height:24px; }
         .toggle-switch input { opacity:0; width:0; height:0; }
         .slider { position:absolute; cursor:pointer; top:0; left:0; right:0; bottom:0; background-color:#ccc; transition:.4s; border-radius:24px; }
@@ -393,6 +394,14 @@
                         <span id="frameStatus">On</span>
                     </div>
                 </div>
+                <!-- ✅ NEW: Auto Background Removal Toggle -->
+                <div class="control-group">
+                    <div class="frame-toggle">
+                        <label>Auto BG Removal:</label>
+                        <label class="toggle-switch"><input type="checkbox" id="bgRemovalToggle" checked><span class="slider"></span></label>
+                        <span id="bgRemovalStatus">On</span>
+                    </div>
+                </div>
                 <div class="control-group">
                     <button class="btn" onclick="downloadImage()"><i class="fas fa-download"></i> Download Profile Picture</button>
                     <button class="btn btn-secondary" onclick="resetAll()"><i class="fas fa-sync-alt"></i> Reset All</button>
@@ -485,6 +494,8 @@
         const toast = document.getElementById('toast');
         const frameToggle = document.getElementById('frameToggle');
         const frameStatus = document.getElementById('frameStatus');
+        const bgRemovalToggle = document.getElementById('bgRemovalToggle');
+        const bgRemovalStatus = document.getElementById('bgRemovalStatus');
         const apiStatus = document.getElementById('apiStatus');
         const progressBar = document.getElementById('progressBar');
         const progressFill = document.getElementById('progressFill');
@@ -503,6 +514,7 @@
         let scale = 1;
         let rotation = 0;
         let frameEnabled = true;
+        let bgRemovalEnabled = true; // ✅ NEW: default ON
         let isBackgroundRemoved = false;
         let isImageLoaded = false;
         let isDownloading = false;
@@ -615,6 +627,20 @@
         upload.addEventListener('change', handleImageUpload);
         canvas.addEventListener('click', ()=>upload.click());
         frameToggle.addEventListener('change', function(){ frameEnabled=this.checked; frameStatus.textContent=frameEnabled?'On':'Off'; draw(); });
+        
+        // ✅ NEW: Background removal toggle listener
+        bgRemovalToggle.addEventListener('change', function() {
+            bgRemovalEnabled = this.checked;
+            bgRemovalStatus.textContent = bgRemovalEnabled ? 'On' : 'Off';
+            if (bgRemovalEnabled) {
+                apiStatus.className = 'api-status connected';
+                apiStatus.innerHTML = '<i class="fas fa-check-circle"></i> Auto Background Removal Enabled';
+            } else {
+                apiStatus.className = 'api-status disabled';
+                apiStatus.innerHTML = '<i class="fas fa-ban"></i> Auto Background Removal Disabled';
+            }
+        });
+
         zoomRange.addEventListener('input', ()=>{ scale=parseFloat(zoomRange.value); zoomValue.innerText=Math.round(scale*100)+'%'; draw(); });
         rotateRange.addEventListener('input', ()=>{ rotation=parseFloat(rotateRange.value); rotateValue.innerText=rotation+'°'; draw(); });
 
@@ -633,17 +659,41 @@
             const file = e.target.files[0];
             if(!file) return;
             if(!file.type.match('image.*')) { showToast('Please select an image file'); return; }
+            
             showLoading('Uploading image...');
             progressBar.style.display='block';
             progressFill.style.width='20%';
+            
             const reader = new FileReader();
             reader.onload = async function(evt) {
                 originalUserImg = new Image();
                 originalUserImg.src = evt.target.result;
                 userImg = new Image();
+                
                 userImg.onload = async ()=>{
-                    try { await removeBackgroundWithAPI(); }
-                    catch(error) { console.error(error); hideLoading(); progressBar.style.display='none'; showToast('Background removal failed. Using original.'); resetPosition(); draw(); }
+                    // ✅ NEW: Check if background removal is enabled
+                    if (bgRemovalEnabled) {
+                        try { 
+                            await removeBackgroundWithAPI(); 
+                        } catch(error) { 
+                            console.error(error); 
+                            hideLoading(); 
+                            progressBar.style.display='none'; 
+                            showToast('Background removal failed. Using original.'); 
+                            resetPosition(); 
+                            draw(); 
+                        }
+                    } else {
+                        // Background removal OFF — just use the original image
+                        progressFill.style.width='100%';
+                        hideLoading();
+                        progressBar.style.display='none';
+                        apiStatus.className = 'api-status disabled';
+                        apiStatus.innerHTML = '<i class="fas fa-ban"></i> Auto Background Removal Disabled';
+                        resetPosition();
+                        draw();
+                        showToast('Photo uploaded (BG removal OFF)');
+                    }
                 };
                 userImg.onerror = ()=>{ hideLoading(); progressBar.style.display='none'; showToast('Error loading image.'); };
                 userImg.src = evt.target.result;
